@@ -98,15 +98,19 @@
     var fmt=new Intl.DateTimeFormat(C.lang,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
     var L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Auberge des Gallant//Kit mariage//FR','CALSCALE:GREGORIAN','METHOD:PUBLISH'];
     var stamp=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d+/,'');
-    var html='';
+    var html='', ov={}, OK='adg-kit:cal-ov:'+v;
+    try{ov=JSON.parse(localStorage.getItem(OK)||'{}')}catch(e){}
+    var soon=new Date(today); soon.setDate(soon.getDate()+7);
     C.items.forEach(function(it,i){
-      var d=add(w,it.o), e=new Date(d); e.setDate(e.getDate()+1);
-      var past=d<today;
+      var d0=add(w,it.o), past=d0<today, d=d0;
+      if(past){var q=(ov[i]||'').split('-'); d=q.length===3?new Date(+q[0],+q[1]-1,+q[2]):new Date(soon);}
+      var e=new Date(d); e.setDate(e.getDate()+1);
       var g='https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(it.t)+'&dates='+ymd(d)+'/'+ymd(e)+'&details='+encodeURIComponent(it.d)+'&location='+encodeURIComponent('Auberge des Gallant');
       var o='https://outlook.live.com/calendar/0/action/compose?subject='+encodeURIComponent(it.t)+'&startdt='+iso(d)+'&enddt='+iso(e)+'&allday=true&body='+encodeURIComponent(it.d)+'&location='+encodeURIComponent('Auberge des Gallant');
-      html+='<li'+(past?' class="past"':'')+'><span class="cl-d">'+esc(fmt.format(d))+'</span><span class="cl-t">'+esc(it.t)+'</span><span class="cl-x">'+esc(it.d)+'</span>'+
-        (past?'<span class="cl-p">'+esc(C.ui.past)+'</span>':'<span class="cl-b"><a href="'+g+'" target="_blank" rel="noopener">'+esc(C.ui.g)+'</a><a href="'+o+'" target="_blank" rel="noopener">'+esc(C.ui.o)+'</a></span>')+'</li>';
-      if(past) return;
+      var head=past?'<span class="cl-d cl-late">'+esc(C.ui.past)+'<label>'+esc(C.ui.own)+' <input type="date" class="cl-own" data-i="'+i+'" value="'+iso(d)+'"></label></span>'
+                    :'<span class="cl-d">'+esc(fmt.format(d))+'</span>';
+      html+='<li'+(past?' class="past"':'')+'>'+head+'<span class="cl-t">'+esc(it.t)+'</span><span class="cl-x">'+esc(it.d)+'</span>'+
+        '<span class="cl-b"><a href="'+g+'" target="_blank" rel="noopener">'+esc(C.ui.g)+'</a><a href="'+o+'" target="_blank" rel="noopener">'+esc(C.ui.o)+'</a></span></li>';
       L.push('BEGIN:VEVENT','UID:adg-'+v+'-'+i+'@kitmariageadg','DTSTAMP:'+stamp,'DTSTART;VALUE=DATE:'+ymd(d),'DTEND;VALUE=DATE:'+ymd(e),
         fold('SUMMARY:'+icsText(it.t)),fold('DESCRIPTION:'+icsText(it.d)),'LOCATION:Auberge des Gallant','TRANSP:TRANSPARENT',
         'BEGIN:VALARM','ACTION:DISPLAY',fold('DESCRIPTION:'+icsText(it.t)),'TRIGGER:-P6DT15H','END:VALARM',
@@ -114,6 +118,8 @@
     });
     L.push('END:VCALENDAR');
     list.innerHTML=html;
+    list.querySelectorAll('.cl-own').forEach(function(x){x.addEventListener('change',function(){
+      if(!x.value)return; ov[x.dataset.i]=x.value; try{localStorage.setItem(OK,JSON.stringify(ov))}catch(e){} render();});});
     if(url) URL.revokeObjectURL(url);
     url=URL.createObjectURL(new Blob([L.join('\r\n')+'\r\n'],{type:'text/calendar;charset=utf-8'}));
     ics.href=url;

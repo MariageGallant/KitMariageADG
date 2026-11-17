@@ -233,7 +233,10 @@ svg{width:100%;height:auto;display:block}
 .cl-b a{font:500 11px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--charbon);text-decoration:none;border:1px solid var(--ligne);padding:9px 11px;white-space:nowrap}
 .cl-b a:hover{border-color:var(--cuivre);color:var(--cuivre)}
 .cl-p{font-size:11.5px;color:#A9A09A;font-style:italic}
-.cal-list li.past .cl-t,.cal-list li.past .cl-d{opacity:.5}
+.cl-late{color:#A2552F}
+.cl-late label{display:block;margin:6px 0 4px;text-transform:none;letter-spacing:.02em;font-weight:400;color:var(--charbon);white-space:nowrap}
+.cl-own{font:400 13px/1 var(--sans);color:var(--charbon);border:1px solid var(--orrose);background:var(--creme);padding:4px 6px;margin-left:4px}
+.cal-list li.past{background:linear-gradient(90deg,rgba(232,181,147,.12),transparent);padding-left:12px;margin-left:-12px}
 .cal-note{font-size:12.5px;color:var(--doux);margin:14px 0 0;font-style:italic}
 .home-cal{display:inline-flex;align-items:center;gap:12px;margin:32px auto 0;padding:13px 20px;border:1px solid var(--cuivre);color:var(--charbon);text-decoration:none;font:500 12px/1.2 var(--sans);letter-spacing:.12em;text-transform:uppercase;transition:background .2s,color .2s}
 .home-cal .s-ic{width:17px;color:var(--cuivre)}

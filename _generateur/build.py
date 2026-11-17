@@ -317,13 +317,13 @@ KEYDATES = [
    "No later than 7:30 a.m. Also settle the open bar tab before you leave, if any."),
 ]
 CAL_UI = {
- "fr": dict(t="Vos dates clés dans votre agenda", d="Inscrivez la date de votre mariage : nous calculons vos échéances avec l'Auberge. Ajoutez-les ensuite à votre agenda, avec un rappel une semaine avant et la veille.",
+ "fr": dict(t="Vos dates clés dans votre agenda", d="Inscrivez la date de votre mariage : nous calculons vos échéances avec l'Auberge. Ajoutez-les ensuite à votre agenda, avec un rappel une semaine avant et la veille. Si une échéance est déjà passée, choisissez la date à laquelle vous la compléterez.",
             lab="Date de votre mariage", ics="Tout ajouter à Outlook ou Apple", ics_n="Fichier agenda (.ics) avec rappels",
-            g="Google", o="Outlook.com", past="Date passée", note="Sur Google Agenda, ajoutez chaque date avec le bouton Google : les rappels suivent vos réglages Google.",
+            g="Google", o="Outlook.com", past="Échéance passée : à faire dès maintenant", own="Choisissez votre date :", note="Sur Google Agenda, ajoutez chaque date avec le bouton Google : les rappels suivent vos réglages Google.",
             file="Dates_cles_mariage_Auberge_des_Gallant.ics", home="Ajoutez vos dates clés à votre agenda", wd="Le jour J"),
- "en": dict(t="Your key dates in your calendar", d="Enter your wedding date: we calculate your deadlines with the Auberge. Then add them to your calendar, with a reminder one week before and the day before.",
+ "en": dict(t="Your key dates in your calendar", d="Enter your wedding date: we calculate your deadlines with the Auberge. Then add them to your calendar, with a reminder one week before and the day before. If a deadline has already passed, pick the date when you will complete it.",
             lab="Your wedding date", ics="Add all to Outlook or Apple", ics_n="Calendar file (.ics) with reminders",
-            g="Google", o="Outlook.com", past="Past date", note="On Google Calendar, add each date with the Google button: reminders follow your Google settings.",
+            g="Google", o="Outlook.com", past="Deadline passed: to do now", own="Pick your date:", note="On Google Calendar, add each date with the Google button: reminders follow your Google settings.",
             file="Key_wedding_dates_Auberge_des_Gallant.ics", home="Add your key dates to your calendar", wd="The wedding day"),
 }
 
@@ -339,7 +339,7 @@ def cal_block(L):
     <ol class="cal-list"></ol>
     <p class="cal-note">{esc(c['note'])}</p>
   </div>
-  <script>window.ADG_CAL={json.dumps({"items": data, "ui": {"g": c["g"], "o": c["o"], "past": c["past"]}, "lang": L.ui["html_lang"]}, ensure_ascii=False)};</script>
+  <script>window.ADG_CAL={json.dumps({"items": data, "ui": {"g": c["g"], "o": c["o"], "past": c["past"], "own": c["own"]}, "lang": L.ui["html_lang"]}, ensure_ascii=False)};</script>
 </div>"""
 
 # ------------------------------------------------------------------ gabarit
