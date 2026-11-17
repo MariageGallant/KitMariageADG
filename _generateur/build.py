@@ -1,7 +1,7 @@
 # Générateur du mini site web du kit de planification (GitHub Pages).
 # Lit contenu_fr.py (et contenu_en.py quand il existera) : même source que le Padlet.
 # Usage : python3 build.py <dossier_source_contenu> <dossier_site>
-import sys, os, re, html, importlib.util, unicodedata
+import sys, os, re, html, json, importlib.util, unicodedata
 
 SRC, OUT = sys.argv[1], sys.argv[2]
 
@@ -36,6 +36,10 @@ UI = {
    home_intro_t="Bienvenue dans votre kit",
    footer="Ce site est réservé aux mariés de l'Auberge des Gallant. Merci de ne pas le partager publiquement.",
    updated="Mis à jour le",
+   search="Rechercher", search_ph="Un mot-clé : chambres, allergies, chandelles",
+   search_none="Aucun résultat. Essayez un autre mot, ou écrivez-nous à mariage@gallant.qc.ca.",
+   search_hint="Tapez un mot-clé pour trouver l'information dans toutes les rubriques.",
+   close="Fermer",
  ),
  "en": dict(
    html_lang="en-CA", other="fr", other_label="Français",
@@ -58,6 +62,10 @@ UI = {
    home_intro_t="Welcome to your kit",
    footer="This site is reserved for Auberge des Gallant couples. Please do not share it publicly.",
    updated="Updated on",
+   search="Search", search_ph="A keyword: rooms, allergies, candles",
+   search_none="No results. Try another word, or write to us at mariage@gallant.qc.ca.",
+   search_hint="Type a keyword to find information across all sections.",
+   close="Close",
  ),
 }
 
@@ -73,7 +81,16 @@ WEB_SUBST = {
   ("dans la colonne « Menu, bar et dégustation »", "dans la rubrique « Menu, bar et dégustation »"),
   ("notre tableau des fournisseurs", "notre page des fournisseurs"),
  ],
- "en": [],
+ "en": [
+  ("This board brings together", "This site brings together"),
+  ("How to use this board", "How to use this site"),
+  ("Each column covers one topic.", "Each section covers one topic."),
+  ("**Topic columns**", "**Topic sections**"),
+  ("throughout this board", "throughout this site"),
+  (", right here in the Accommodations section.", ", further down this page."),
+  ('in the "Menu, bar and tasting" column', 'in the "Menu, bar and tasting" section'),
+  ("our supplier board", "our supplier page"),
+ ],
 }
 
 # Pièces jointes « @ » : texte source -> (libellé, cible). Cible = fichier dans downloads/<lang>/,
@@ -92,7 +109,19 @@ ATTACH = {
   "Formulaire_La_Grande_Finale.pdf": ("Formulaire « La Grande Finale » (PDF)", "Formulaire_La_Grande_Finale.pdf"),
   "Hébergement à proximité - Local lodging.pdf": ("Voir la fiche dans la rubrique Hébergement", "#hebergement/hebergement-et-transport-a-proximite"),
  },
- "en": {},
+ "en": {
+  'Your hall\'s floor plan (see "Downloadable tools")': ("Floor plans of our reception halls", "Floor_plans_of_our_reception_halls.zip"),
+  "Place card guide (PDF)": ("Place card guide (PDF)", "Place_card_guide.pdf"),
+  "Symbols as PNG files (in the template kit)": ("Place card templates and symbols (ZIP)", "Place_card_templates.zip"),
+  "padlet.com/mariageADG/liste-de-fournisseurs-recommandes-s0254d6m2cv4mz1d4cnq": ("Our favourite suppliers", "https://padlet.com/mariageADG/liste-de-fournisseurs-recommandes-s0254d6m2cv4mz1d4cnq"),
+  "Wedding_timeline_Auberge_des_Gallant.xlsx": ("Planning timeline (Excel)", "Wedding_timeline_Auberge_des_Gallant.xlsx"),
+  "Wedding_budget_Auberge_des_Gallant.xlsx": ("Wedding budget (Excel)", "Wedding_budget_Auberge_des_Gallant.xlsx"),
+  "Floor_plan_kit.zip": ("Floor plans of our reception halls (ZIP)", "Floor_plans_of_our_reception_halls.zip"),
+  "Place card guide EN.pdf": ("Place card guide (PDF)", "Place_card_guide.pdf"),
+  "Place_card_kit.zip": ("Place card templates (ZIP)", "Place_card_templates.zip"),
+  "La_Grande_Finale_form.pdf": ("\"La Grande Finale\" form (PDF)", "La_Grande_Finale_form.pdf"),
+  "Hébergement à proximité - Local lodging.pdf": ("See the sheet in the Accommodations section", "#accommodations/nearby-lodging-and-transportation"),
+ },
 }
 
 def slug(s):
@@ -102,13 +131,35 @@ def slug(s):
 
 esc = lambda s: html.escape(s, quote=True)
 
+LANG_NOW = "fr"
 def human_size(n):
+    if LANG_NOW == "en":
+        return f"{n/1024/1024:.1f} MB" if n >= 1024 * 1024 else f"{max(1, round(n/1024))} KB"
     if n >= 1024 * 1024: return f"{n/1024/1024:.1f} Mo".replace(".", ",")
     return f"{max(1, round(n/1024))} Ko"
 
 ICON_DL = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 ICON_EXT = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6m0-6-9 9M18 14v6H4V6h6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 ICON_ARR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+
+def load_keywords(lang):
+    p = os.path.join(SRC, f"padlet_{lang}.py")
+    if not os.path.exists(p): return {}
+    sys.path.insert(0, SRC)
+    try:
+        spec = importlib.util.spec_from_file_location(f"padlet_{lang}", p)
+        m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+    except Exception as e:
+        print("  ! mots-clés non chargés :", e); return {}
+    finally:
+        sys.path.pop(0)
+    kw = {}
+    for col in m.COLONNES:
+        for pub in col[2]:
+            if pub.get("mots"): kw[pub["titre"]] = pub["mots"]
+    return kw
+
+ICON_SEARCH = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>'
 
 class Lang:
     def __init__(self, code, mod):
@@ -120,6 +171,23 @@ class Lang:
                 p["slug"] = slug(p["titre"])
         self.by_title = {s["titre"]: s for s in self.sections}
         self.used_subst = set()
+        self.kw = load_keywords(code)
+
+    def plain(self, line):
+        m = re.match(r"^(##|-|\[\]|\[A\]|!|@|>|&|%)\s+(.*)$", line)
+        k, t = (m.group(1), m.group(2)) if m else ("", line)
+        if k in (">", "&", "%"): return ""
+        if k == "@": t = ATTACH[self.code].get(t, (t, None))[0]
+        return self.subst(t).replace("**", "")
+
+    def index(self):
+        out = []
+        for s in self.sections:
+            for p in s["posts"]:
+                out.append({"s": s["titre"], "p": self.subst(p["titre"]), "u": f'{s["slug"]}.html#{p["slug"]}',
+                            "k": self.kw.get(p["titre"], ""),
+                            "t": " ".join(x for x in (self.plain(l) for l in p["corps"]) if x)})
+        return out
 
     def subst(self, t):
         for i, (a, b) in enumerate(WEB_SUBST[self.code]):
@@ -140,6 +208,10 @@ class Lang:
                 return f'« <a href="{s["slug"]}.html">{m.group(1)}</a> »'
             return m.group(0)
         t = re.sub(r"« ([^«»]+?) »", sec, t)
+        def sec_en(m):
+            s = self.by_title.get(html.unescape(m.group(1)))
+            return f'"<a href="{s["slug"]}.html">{m.group(1)}</a>"' if s else m.group(0)
+        t = re.sub(r"&quot;([^&]+?)&quot;", sec_en, t)
         return t
 
     def attachment(self, key):
@@ -227,12 +299,22 @@ def topbar(L, current=None):
   <div class="top-in">
     <a class="brand" href="index.html" aria-label="{esc(ui['home'])}"><img src="../assets/img/logo.png" alt="Auberge des Gallant"></a>
     <nav class="top-nav">
+      <button class="search-btn" aria-expanded="false" aria-controls="search"><span class="s-ic">{ICON_SEARCH}</span><span class="s-l">{esc(ui['search'])}</span></button>
       {sw}
       <button class="menu-btn" aria-expanded="false" aria-controls="menu"><span class="bars"></span>{esc(ui['menu'])}</button>
     </nav>
   </div>
   <div class="menu" id="menu" hidden>
     <ol>{items}</ol>
+  </div>
+  <div class="search" id="search" hidden>
+    <div class="search-in">
+      <label class="search-box"><span class="s-ic">{ICON_SEARCH}</span><span class="sr">{esc(ui['search'])}</span>
+        <input type="search" class="search-q" placeholder="{esc(ui['search_ph'])}" autocomplete="off" spellcheck="false"></label>
+      <button class="search-close" type="button">{esc(ui['close'])}</button>
+      <p class="search-hint">{esc(ui['search_hint'])}</p>
+      <ol class="search-res" aria-live="polite"></ol>
+    </div>
   </div>
 </header>"""
 
@@ -253,6 +335,8 @@ def footer(L):
   <p>Auberge des Gallant · {esc(ui['address'])}</p>
   <p class="foot-note">{esc(ui['footer'])}</p>
 </footer>
+<script>window.ADG_UI={{none:{json.dumps(ui['search_none'])}}};</script>
+<script src="../assets/search-{L.code}.js"></script>
 <script src="../assets/app.js"></script>
 </body></html>"""
 
@@ -273,7 +357,7 @@ def page_home(L):
     <p class="kicker">{esc(ui['kicker'])}</p>
     <h1>{esc(m.TITRE)}</h1>
     <p class="lede">{esc(m.SOUS_TITRE)}</p>
-    <span class="rule"></span>
+    <button class="home-search search-open" type="button"><span class="s-ic">{ICON_SEARCH}</span><span>{esc(ui['search_ph'])}</span></button>
   </section>
   <section class="grid-wrap">
     <h2 class="sc-title">{esc(ui['sections'])}</h2>
@@ -366,9 +450,11 @@ def write(rel, txt):
 
 write("index.html", page_landing())
 for code, L in LANGS.items():
+    LANG_NOW = code
     write(f"{code}/index.html", page_home(L))
     for i, s in enumerate(L.sections):
         write(f"{code}/{s['slug']}.html", page_section(L, i, s))
+    write(f"assets/search-{code}.js", "window.ADG_IDX=" + json.dumps(L.index(), ensure_ascii=False, separators=(",", ":")) + ";\n")
     unused = [WEB_SUBST[code][i][0] for i in range(len(WEB_SUBST[code])) if i not in L.used_subst]
     if unused: print(f"  ! [{code}] ajustements web non utilisés :", unused)
     print(f"{code} : {len(L.sections)} rubriques, {sum(len(s['posts']) for s in L.sections)} publications")

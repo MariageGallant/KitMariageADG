@@ -16,12 +16,22 @@
   <div class="top-in">
     <a class="brand" href="index.html" aria-label="Accueil"><img src="../assets/img/logo.png" alt="Auberge des Gallant"></a>
     <nav class="top-nav">
-      
+      <button class="search-btn" aria-expanded="false" aria-controls="search"><span class="s-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="s-l">Rechercher</span></button>
+      <a class="lang" href="../en/accommodations.html" lang="en">English</a>
       <button class="menu-btn" aria-expanded="false" aria-controls="menu"><span class="bars"></span>Rubriques</button>
     </nav>
   </div>
   <div class="menu" id="menu" hidden>
     <ol><li><a href="bienvenue.html"><span class="n">01</span>Bienvenue</a></li><li><a href="dates-cles-avec-l-auberge.html"><span class="n">02</span>Dates clés avec l&#x27;Auberge</a></li><li><a href="echeancier.html"><span class="n">03</span>Échéancier</a></li><li><a href="nos-salles-et-la-ceremonie.html"><span class="n">04</span>Nos salles et la cérémonie</a></li><li><a href="salle-montage-et-decoration.html"><span class="n">05</span>Salle, montage et décoration</a></li><li><a href="menu-bar-et-degustation.html"><span class="n">06</span>Menu, bar et dégustation</a></li><li><a href="invites-plan-de-salle-et-marque-places.html"><span class="n">07</span>Invités, plan de salle et marque-places</a></li><li><a href="hebergement.html" aria-current="page"><span class="n">08</span>Hébergement</a></li><li><a href="vos-fournisseurs.html"><span class="n">09</span>Vos fournisseurs</a></li><li><a href="le-jour-j.html"><span class="n">10</span>Le jour J</a></li><li><a href="petites-attentions.html"><span class="n">11</span>Petites attentions</a></li><li><a href="outils-a-telecharger.html"><span class="n">12</span>Outils à télécharger</a></li></ol>
+  </div>
+  <div class="search" id="search" hidden>
+    <div class="search-in">
+      <label class="search-box"><span class="s-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="sr">Rechercher</span>
+        <input type="search" class="search-q" placeholder="Un mot-clé : chambres, allergies, chandelles" autocomplete="off" spellcheck="false"></label>
+      <button class="search-close" type="button">Fermer</button>
+      <p class="search-hint">Tapez un mot-clé pour trouver l&#x27;information dans toutes les rubriques.</p>
+      <ol class="search-res" aria-live="polite"></ol>
+    </div>
   </div>
 </header>
 <main>
@@ -108,5 +118,7 @@
   <p>Auberge des Gallant · 1171, chemin Saint-Henri, Sainte-Marthe (Québec) J0P 1W0</p>
   <p class="foot-note">Ce site est réservé aux mariés de l&#x27;Auberge des Gallant. Merci de ne pas le partager publiquement.</p>
 </footer>
+<script>window.ADG_UI={none:"Aucun r\u00e9sultat. Essayez un autre mot, ou \u00e9crivez-nous \u00e0 mariage@gallant.qc.ca."};</script>
+<script src="../assets/search-fr.js"></script>
 <script src="../assets/app.js"></script>
 </body></html>
