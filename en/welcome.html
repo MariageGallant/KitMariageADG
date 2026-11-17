@@ -16,22 +16,17 @@
   <div class="top-in">
     <a class="brand" href="index.html" aria-label="Home"><img src="../assets/img/logo.png" alt="Auberge des Gallant"></a>
     <nav class="top-nav">
-      <button class="search-btn" aria-expanded="false" aria-controls="search"><span class="s-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="s-l">Search</span></button>
+      <div class="mini-search">
+        <label class="mini-box"><span class="s-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="sr">Search</span>
+          <input type="search" class="search-q" placeholder="Search" autocomplete="off" spellcheck="false" aria-controls="search"></label>
+        <div class="search" id="search" hidden><ol class="search-res" aria-live="polite"></ol></div>
+      </div>
       <a class="lang" href="../fr/bienvenue.html" lang="fr">Français</a>
-      <button class="menu-btn" aria-expanded="false" aria-controls="menu"><span class="bars"></span>Sections</button>
+      <button class="menu-btn" aria-expanded="false" aria-controls="menu"><span class="bars"></span><span class="m-l">Sections</span></button>
     </nav>
   </div>
   <div class="menu" id="menu" hidden>
     <ol><li><a href="welcome.html" aria-current="page"><span class="n">01</span>Welcome</a></li><li><a href="key-dates-with-the-auberge.html"><span class="n">02</span>Key dates with the Auberge</a></li><li><a href="timeline.html"><span class="n">03</span>Timeline</a></li><li><a href="our-reception-halls-and-the-ceremony.html"><span class="n">04</span>Our reception halls and the ceremony</a></li><li><a href="hall-setup-and-decor.html"><span class="n">05</span>Hall, setup and decor</a></li><li><a href="menu-bar-and-tasting.html"><span class="n">06</span>Menu, bar and tasting</a></li><li><a href="guests-floor-plan-and-place-cards.html"><span class="n">07</span>Guests, floor plan and place cards</a></li><li><a href="accommodations.html"><span class="n">08</span>Accommodations</a></li><li><a href="your-suppliers.html"><span class="n">09</span>Your suppliers</a></li><li><a href="the-wedding-day.html"><span class="n">10</span>The wedding day</a></li><li><a href="special-touches.html"><span class="n">11</span>Special touches</a></li><li><a href="downloadable-tools.html"><span class="n">12</span>Downloadable tools</a></li></ol>
-  </div>
-  <div class="search" id="search" hidden>
-    <div class="search-in">
-      <label class="search-box"><span class="s-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="sr">Search</span>
-        <input type="search" class="search-q" placeholder="A keyword: rooms, allergies, candles" autocomplete="off" spellcheck="false"></label>
-      <button class="search-close" type="button">Close</button>
-      <p class="search-hint">Type a keyword to find information across all sections.</p>
-      <ol class="search-res" aria-live="polite"></ol>
-    </div>
   </div>
 </header>
 <main>

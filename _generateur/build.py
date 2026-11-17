@@ -299,22 +299,17 @@ def topbar(L, current=None):
   <div class="top-in">
     <a class="brand" href="index.html" aria-label="{esc(ui['home'])}"><img src="../assets/img/logo.png" alt="Auberge des Gallant"></a>
     <nav class="top-nav">
-      <button class="search-btn" aria-expanded="false" aria-controls="search"><span class="s-ic">{ICON_SEARCH}</span><span class="s-l">{esc(ui['search'])}</span></button>
+      <div class="mini-search">
+        <label class="mini-box"><span class="s-ic">{ICON_SEARCH}</span><span class="sr">{esc(ui['search'])}</span>
+          <input type="search" class="search-q" placeholder="{esc(ui['search'])}" autocomplete="off" spellcheck="false" aria-controls="search"></label>
+        <div class="search" id="search" hidden><ol class="search-res" aria-live="polite"></ol></div>
+      </div>
       {sw}
-      <button class="menu-btn" aria-expanded="false" aria-controls="menu"><span class="bars"></span>{esc(ui['menu'])}</button>
+      <button class="menu-btn" aria-expanded="false" aria-controls="menu"><span class="bars"></span><span class="m-l">{esc(ui['menu'])}</span></button>
     </nav>
   </div>
   <div class="menu" id="menu" hidden>
     <ol>{items}</ol>
-  </div>
-  <div class="search" id="search" hidden>
-    <div class="search-in">
-      <label class="search-box"><span class="s-ic">{ICON_SEARCH}</span><span class="sr">{esc(ui['search'])}</span>
-        <input type="search" class="search-q" placeholder="{esc(ui['search_ph'])}" autocomplete="off" spellcheck="false"></label>
-      <button class="search-close" type="button">{esc(ui['close'])}</button>
-      <p class="search-hint">{esc(ui['search_hint'])}</p>
-      <ol class="search-res" aria-live="polite"></ol>
-    </div>
   </div>
 </header>"""
 
@@ -357,7 +352,7 @@ def page_home(L):
     <p class="kicker">{esc(ui['kicker'])}</p>
     <h1>{esc(m.TITRE)}</h1>
     <p class="lede">{esc(m.SOUS_TITRE)}</p>
-    <button class="home-search search-open" type="button"><span class="s-ic">{ICON_SEARCH}</span><span>{esc(ui['search_ph'])}</span></button>
+    <span class="rule"></span>
   </section>
   <section class="grid-wrap">
     <h2 class="sc-title">{esc(ui['sections'])}</h2>
