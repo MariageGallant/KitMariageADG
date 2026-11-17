@@ -284,7 +284,7 @@ def head(title, depth, lang_attr, desc=""):
 <title>{esc(title)}</title>
 <link rel="icon" href="{r}assets/img/favicon.png">
 {FONTS}
-<link rel="stylesheet" href="{r}assets/style.css">
+<link rel="stylesheet" href="{r}assets/style.css?v={ASSET_V}">
 </head>"""
 
 def topbar(L, current=None):
@@ -331,8 +331,8 @@ def footer(L):
   <p class="foot-note">{esc(ui['footer'])}</p>
 </footer>
 <script>window.ADG_UI={{none:{json.dumps(ui['search_none'])}}};</script>
-<script src="../assets/search-{L.code}.js"></script>
-<script src="../assets/app.js"></script>
+<script src="../assets/search-{L.code}.js?v={ASSET_V}"></script>
+<script src="../assets/app.js?v={ASSET_V}"></script>
 </body></html>"""
 
 def page_home(L):
@@ -430,6 +430,14 @@ def page_landing():
 </body></html>"""
 
 # ------------------------------------------------------------------ construction
+import hashlib
+_h = hashlib.sha1()
+for _f in ("style.css", "app.js"):
+    _h.update(open(os.path.join(OUT, "assets", _f), "rb").read())
+for _c in ("fr", "en"):
+    _p = os.path.join(SRC, f"contenu_{_c}.py")
+    if os.path.exists(_p): _h.update(open(_p, "rb").read())
+ASSET_V = _h.hexdigest()[:8]
 LANGS = {}
 for code in ("fr", "en"):
     mod = load(code)
