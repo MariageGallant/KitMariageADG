@@ -75,3 +75,52 @@
   document.addEventListener('click',function(e){if(!wrap.contains(e.target))hide();});
   res.addEventListener('click',function(e){if(e.target.closest('a')){hide();q.blur();}});
 })();
+(function(){
+  // Dates clés : calcul à partir de la date du mariage, fichier .ics avec rappels, liens Google et Outlook.com
+  var box=document.getElementById('agenda'), C=window.ADG_CAL;
+  if(!box||!C) return;
+  var inp=box.querySelector('.cal-date'), out=box.querySelector('.cal-out'), list=box.querySelector('.cal-list'), ics=box.querySelector('.cal-ics');
+  var KEY='adg-kit:date-mariage', url=null;
+  function pad(n){return (n<10?'0':'')+n}
+  function ymd(d){return d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())}
+  function iso(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+  function add(w,o){var d=new Date(w.getFullYear(),w.getMonth(),w.getDate());
+    if(o[0]==='m'){var day=d.getDate();d.setDate(1);d.setMonth(d.getMonth()+o[1]);var last=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();d.setDate(Math.min(day,last));}
+    else d.setDate(d.getDate()+o[1]);
+    return d;}
+  function esc(s){return s.replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function icsText(s){return s.replace(/\\/g,'\\\\').replace(/;/g,'\;').replace(/,/g,'\\,').replace(/\n/g,'\\n')}
+  function fold(line){var o='',b=0;while(line.length>60){o+=line.slice(0,60)+'\r\n ';line=line.slice(60);}return o+line;}
+  function render(){
+    var v=inp.value; if(!v){out.hidden=true;return;}
+    try{localStorage.setItem(KEY,v)}catch(e){}
+    var p=v.split('-'), w=new Date(+p[0],+p[1]-1,+p[2]), today=new Date(); today.setHours(0,0,0,0);
+    var fmt=new Intl.DateTimeFormat(C.lang,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    var L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Auberge des Gallant//Kit mariage//FR','CALSCALE:GREGORIAN','METHOD:PUBLISH'];
+    var stamp=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d+/,'');
+    var html='';
+    C.items.forEach(function(it,i){
+      var d=add(w,it.o), e=new Date(d); e.setDate(e.getDate()+1);
+      var past=d<today;
+      var g='https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(it.t)+'&dates='+ymd(d)+'/'+ymd(e)+'&details='+encodeURIComponent(it.d)+'&location='+encodeURIComponent('Auberge des Gallant');
+      var o='https://outlook.live.com/calendar/0/action/compose?subject='+encodeURIComponent(it.t)+'&startdt='+iso(d)+'&enddt='+iso(e)+'&allday=true&body='+encodeURIComponent(it.d)+'&location='+encodeURIComponent('Auberge des Gallant');
+      html+='<li'+(past?' class="past"':'')+'><span class="cl-d">'+esc(fmt.format(d))+'</span><span class="cl-t">'+esc(it.t)+'</span><span class="cl-x">'+esc(it.d)+'</span>'+
+        (past?'<span class="cl-p">'+esc(C.ui.past)+'</span>':'<span class="cl-b"><a href="'+g+'" target="_blank" rel="noopener">'+esc(C.ui.g)+'</a><a href="'+o+'" target="_blank" rel="noopener">'+esc(C.ui.o)+'</a></span>')+'</li>';
+      if(past) return;
+      L.push('BEGIN:VEVENT','UID:adg-'+v+'-'+i+'@kitmariageadg','DTSTAMP:'+stamp,'DTSTART;VALUE=DATE:'+ymd(d),'DTEND;VALUE=DATE:'+ymd(e),
+        fold('SUMMARY:'+icsText(it.t)),fold('DESCRIPTION:'+icsText(it.d)),'LOCATION:Auberge des Gallant','TRANSP:TRANSPARENT',
+        'BEGIN:VALARM','ACTION:DISPLAY',fold('DESCRIPTION:'+icsText(it.t)),'TRIGGER:-P6DT15H','END:VALARM',
+        'BEGIN:VALARM','ACTION:DISPLAY',fold('DESCRIPTION:'+icsText(it.t)),'TRIGGER:-PT15H','END:VALARM','END:VEVENT');
+    });
+    L.push('END:VCALENDAR');
+    list.innerHTML=html;
+    if(url) URL.revokeObjectURL(url);
+    url=URL.createObjectURL(new Blob([L.join('\r\n')+'\r\n'],{type:'text/calendar;charset=utf-8'}));
+    ics.href=url;
+    out.hidden=false;
+  }
+  try{var s=localStorage.getItem(KEY);if(s)inp.value=s}catch(e){}
+  inp.addEventListener('change',render); inp.addEventListener('input',render);
+  ics.addEventListener('click',function(e){if(ics.getAttribute('href')==='#')e.preventDefault()});
+  render();
+})();

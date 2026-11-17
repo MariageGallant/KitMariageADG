@@ -159,6 +159,7 @@ def load_keywords(lang):
             if pub.get("mots"): kw[pub["titre"]] = pub["mots"]
     return kw
 
+ICON_CAL = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>'
 ICON_SEARCH = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>'
 
 class Lang:
@@ -267,6 +268,80 @@ class Lang:
         close()
         return "\n".join(out), chk
 
+# ------------------------------------------------------------------ dates clés pour l'agenda
+# Décalage par rapport à la date du mariage : ("m", n) = n mois avant, ("d", n) = n jours (négatif = avant).
+KEYDATES = [
+ (("m", -12), "Planifier votre rencontre avec votre coordonnatrice mariage",
+   "Entre 8 et 12 mois avant le mariage : menu, aménagement, hébergement et horaire de la réception. Écrivez-nous à mariage@gallant.qc.ca pour fixer le rendez-vous.",
+   "Plan your meeting with your wedding coordinator",
+   "Between 8 and 12 months before the wedding: menu, setup, accommodations and reception schedule. Write to mariage@gallant.qc.ca to set up the meeting."),
+ (("m", -8), "Menu, bar et essai du menu mariage",
+   "Entre 6 et 8 mois avant : planifiez le menu et le bar avec votre coordonnatrice, et réservez votre essai du menu mariage (sur rendez-vous, au moins 1 semaine d'avance).",
+   "Menu, bar and wedding menu tasting",
+   "Between 6 and 8 months before: plan the menu and bar with your coordinator, and book your wedding menu tasting (by appointment, at least 1 week ahead)."),
+ (("m", -6), "Bloc de chambres : transmettre le lien à vos invités",
+   "Le lien de réservation de votre bloc de chambres vous est envoyé dans les 6 mois précédant le mariage. Transmettez-le à vos invités dès que vous le recevez : seules les réservations faites par ce lien profitent du tarif préférentiel.",
+   "Room block: share the link with your guests",
+   "Your room block booking link is sent within the 6 months before the wedding. Share it with your guests as soon as you receive it: only bookings made through this link get the preferred rate."),
+ (("m", -1), "Décompte final et formulaire « La Grande Finale »",
+   "Envoyez votre décompte final des invités, vos choix de repas et le formulaire « La Grande Finale » à mariage@gallant.qc.ca. La rencontre finale a lieu dans les 30 jours qui précèdent le mariage; le paiement final s'y fait.",
+   "Final count and \"La Grande Finale\" form",
+   "Send your final guest count, meal choices and the \"La Grande Finale\" form to mariage@gallant.qc.ca. The final meeting takes place within 30 days of the wedding; the final payment is made at that meeting."),
+ (("d", -28), "Plan de salle complet à remettre",
+   "Remettez votre plan de salle complet lors de la rencontre finale : plan des tables, nombre de personnes et de chaque plat par table, invités avec allergies et numéros de table.",
+   "Complete floor plan due",
+   "Hand in your complete floor plan at the final meeting: table layout, number of guests and of each dish per table, guests with allergies and table numbers."),
+ (("d", -21), "Marque-places et nourriture de l'extérieur",
+   "Préparez vos marque-places selon notre guide. Dernier jour pour demander l'approbation de nourriture de l'extérieur à réchauffer (des frais s'appliquent).",
+   "Place cards and outside food",
+   "Prepare your place cards following our guide. Last day to request approval for outside food to be reheated (fees apply)."),
+ (("d", -14), "Articles de décoration à apporter à l'Auberge",
+   "Apportez nappes, chemins de table, serviettes, housses de chaises et tout ce qui est nécessaire au montage. À partir d'aujourd'hui, aucune modification au décompte final ni aux choix de repas.",
+   "Bring your decor items to the Auberge",
+   "Bring your tablecloths, table runners, napkins, chair covers and everything needed for the setup. From today, no changes to the final count or meal choices."),
+ (("d", -3), "Plan de salle final",
+   "72 heures avant, le plan de salle est considéré comme final. C'est aussi le premier jour pour déposer les cadeaux de vos invités en chambre, s'il y a lieu.",
+   "Floor plan is final",
+   "72 hours before, the floor plan is considered final. It is also the first day to drop off gifts for your guests' rooms, if any."),
+ (("d", -1), "Cadeaux pour vos invités en chambre",
+   "S'il y a lieu, remettez-nous les cadeaux prêts et emballés, idéalement aujourd'hui (au plus tard à 9 h 30 le jour du mariage).",
+   "Gifts for your guests' rooms",
+   "If any, bring us the gifts ready and wrapped, ideally today (no later than 9:30 a.m. on the wedding day)."),
+ (("d", 0), "Notre mariage à l'Auberge des Gallant",
+   "Accès à votre salle dès 8 h pour la décoration. Marque-places à installer sur les tables avant l'entrée des invités.",
+   "Our wedding at Auberge des Gallant",
+   "Access to your reception hall from 8 a.m. for decorating. Place cards to be set on the tables before guests come in."),
+ (("d", 1), "Récupérer vos effets personnels",
+   "Au plus tard à 7 h 30. Réglez aussi la facture ouverte du bar avant votre départ, s'il y a lieu.",
+   "Pick up your belongings",
+   "No later than 7:30 a.m. Also settle the open bar tab before you leave, if any."),
+]
+CAL_UI = {
+ "fr": dict(t="Vos dates clés dans votre agenda", d="Inscrivez la date de votre mariage : nous calculons vos échéances avec l'Auberge. Ajoutez-les ensuite à votre agenda, avec un rappel une semaine avant et la veille.",
+            lab="Date de votre mariage", ics="Tout ajouter à Outlook ou Apple", ics_n="Fichier agenda (.ics) avec rappels",
+            g="Google", o="Outlook.com", past="Date passée", note="Sur Google Agenda, ajoutez chaque date avec le bouton Google : les rappels suivent vos réglages Google.",
+            file="Dates_cles_mariage_Auberge_des_Gallant.ics", home="Ajoutez vos dates clés à votre agenda", wd="Le jour J"),
+ "en": dict(t="Your key dates in your calendar", d="Enter your wedding date: we calculate your deadlines with the Auberge. Then add them to your calendar, with a reminder one week before and the day before.",
+            lab="Your wedding date", ics="Add all to Outlook or Apple", ics_n="Calendar file (.ics) with reminders",
+            g="Google", o="Outlook.com", past="Past date", note="On Google Calendar, add each date with the Google button: reminders follow your Google settings.",
+            file="Key_wedding_dates_Auberge_des_Gallant.ics", home="Add your key dates to your calendar", wd="The wedding day"),
+}
+
+def cal_block(L):
+    c = CAL_UI[L.code]; fr = L.code == "fr"
+    data = [{"o": o, "t": (tf if fr else te), "d": (df if fr else de)} for o, tf, df, te, de in KEYDATES]
+    return f"""<div class="cal" id="agenda">
+  <p class="kicker">{esc(c['t'])}</p>
+  <p class="cal-d">{esc(c['d'])}</p>
+  <label class="cal-in"><span>{esc(c['lab'])}</span><input type="date" class="cal-date"></label>
+  <div class="cal-out" hidden>
+    <a class="cal-ics" href="#" download="{c['file']}"><span class="file-ic">{ICON_DL}</span><span><span class="big-t">{esc(c['ics'])}</span><span class="cal-n">{esc(c['ics_n'])}</span></span></a>
+    <ol class="cal-list"></ol>
+    <p class="cal-note">{esc(c['note'])}</p>
+  </div>
+  <script>window.ADG_CAL={json.dumps({"items": data, "ui": {"g": c["g"], "o": c["o"], "past": c["past"]}, "lang": L.ui["html_lang"]}, ensure_ascii=False)};</script>
+</div>"""
+
 # ------------------------------------------------------------------ gabarit
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
          '<link href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@400;500&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">')
@@ -352,7 +427,7 @@ def page_home(L):
     <p class="kicker">{esc(ui['kicker'])}</p>
     <h1>{esc(m.TITRE)}</h1>
     <p class="lede">{esc(m.SOUS_TITRE)}</p>
-    <span class="rule"></span>
+    <a class="home-cal" href="{L.sections[1]['slug']}.html#agenda"><span class="s-ic">{ICON_CAL}</span>{esc(CAL_UI[L.code]['home'])}<span class="hc-go">{ICON_ARR}</span></a>
   </section>
   <section class="grid-wrap">
     <h2 class="sc-title">{esc(ui['sections'])}</h2>
@@ -371,7 +446,7 @@ def page_section(L, i, s):
     for p in s["posts"]:
         b, chk = L.body(s, p); any_chk |= chk
         arts.append(f'<article class="post" id="{p["slug"]}"><h3>{esc(L.subst(p["titre"]))}</h3>\n{b}\n</article>')
-    extra = ""
+    extra = cal_block(L) if i == 1 else ""
     if s is secs[-1]:   # Outils à télécharger : le kit complet en tête
         def big(t):
             lab, f, d = t

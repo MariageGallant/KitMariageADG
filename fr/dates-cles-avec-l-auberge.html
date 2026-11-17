@@ -9,7 +9,7 @@
 <title>Dates clés avec l&#x27;Auberge · Kit de planification · Auberge des Gallant</title>
 <link rel="icon" href="../assets/img/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@400;500&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/style.css?v=630b28c7">
+<link rel="stylesheet" href="../assets/style.css?v=e200fad2">
 </head>
 <body class="section">
 <header class="top">
@@ -39,7 +39,17 @@
   <div class="sec-body">
     <aside class="toc"><p class="toc-t">Sur cette page</p><ol><li><a href="#8-a-12-mois-avant">8 à 12 mois avant</a></li><li><a href="#6-a-8-mois-avant">6 à 8 mois avant</a></li><li><a href="#1-mois-avant">1 mois avant</a></li><li><a href="#3-semaines-avant">3 semaines avant</a></li><li><a href="#du-21e-au-14e-jour-avant">Du 21e au 14e jour avant</a></li><li><a href="#2-semaines-avant">2 semaines avant</a></li><li><a href="#72-heures-avant">72 heures avant</a></li><li><a href="#la-veille-idealement">La veille, idéalement</a></li><li><a href="#le-jour-j">Le jour J</a></li><li><a href="#le-lendemain">Le lendemain</a></li></ol>
       <button class="print" onclick="window.print()">Imprimer cette page</button></aside>
-    <div class="posts"><p class="check-note">Cochez les étapes au fur et à mesure : vos coches restent enregistrées sur cet appareil.</p>
+    <div class="posts"><div class="cal" id="agenda">
+  <p class="kicker">Vos dates clés dans votre agenda</p>
+  <p class="cal-d">Inscrivez la date de votre mariage : nous calculons vos échéances avec l&#x27;Auberge. Ajoutez-les ensuite à votre agenda, avec un rappel une semaine avant et la veille.</p>
+  <label class="cal-in"><span>Date de votre mariage</span><input type="date" class="cal-date"></label>
+  <div class="cal-out" hidden>
+    <a class="cal-ics" href="#" download="Dates_cles_mariage_Auberge_des_Gallant.ics"><span class="file-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><span class="big-t">Tout ajouter à Outlook ou Apple</span><span class="cal-n">Fichier agenda (.ics) avec rappels</span></span></a>
+    <ol class="cal-list"></ol>
+    <p class="cal-note">Sur Google Agenda, ajoutez chaque date avec le bouton Google : les rappels suivent vos réglages Google.</p>
+  </div>
+  <script>window.ADG_CAL={"items": [{"o": ["m", -12], "t": "Planifier votre rencontre avec votre coordonnatrice mariage", "d": "Entre 8 et 12 mois avant le mariage : menu, aménagement, hébergement et horaire de la réception. Écrivez-nous à mariage@gallant.qc.ca pour fixer le rendez-vous."}, {"o": ["m", -8], "t": "Menu, bar et essai du menu mariage", "d": "Entre 6 et 8 mois avant : planifiez le menu et le bar avec votre coordonnatrice, et réservez votre essai du menu mariage (sur rendez-vous, au moins 1 semaine d'avance)."}, {"o": ["m", -6], "t": "Bloc de chambres : transmettre le lien à vos invités", "d": "Le lien de réservation de votre bloc de chambres vous est envoyé dans les 6 mois précédant le mariage. Transmettez-le à vos invités dès que vous le recevez : seules les réservations faites par ce lien profitent du tarif préférentiel."}, {"o": ["m", -1], "t": "Décompte final et formulaire « La Grande Finale »", "d": "Envoyez votre décompte final des invités, vos choix de repas et le formulaire « La Grande Finale » à mariage@gallant.qc.ca. La rencontre finale a lieu dans les 30 jours qui précèdent le mariage; le paiement final s'y fait."}, {"o": ["d", -28], "t": "Plan de salle complet à remettre", "d": "Remettez votre plan de salle complet lors de la rencontre finale : plan des tables, nombre de personnes et de chaque plat par table, invités avec allergies et numéros de table."}, {"o": ["d", -21], "t": "Marque-places et nourriture de l'extérieur", "d": "Préparez vos marque-places selon notre guide. Dernier jour pour demander l'approbation de nourriture de l'extérieur à réchauffer (des frais s'appliquent)."}, {"o": ["d", -14], "t": "Articles de décoration à apporter à l'Auberge", "d": "Apportez nappes, chemins de table, serviettes, housses de chaises et tout ce qui est nécessaire au montage. À partir d'aujourd'hui, aucune modification au décompte final ni aux choix de repas."}, {"o": ["d", -3], "t": "Plan de salle final", "d": "72 heures avant, le plan de salle est considéré comme final. C'est aussi le premier jour pour déposer les cadeaux de vos invités en chambre, s'il y a lieu."}, {"o": ["d", -1], "t": "Cadeaux pour vos invités en chambre", "d": "S'il y a lieu, remettez-nous les cadeaux prêts et emballés, idéalement aujourd'hui (au plus tard à 9 h 30 le jour du mariage)."}, {"o": ["d", 0], "t": "Notre mariage à l'Auberge des Gallant", "d": "Accès à votre salle dès 8 h pour la décoration. Marque-places à installer sur les tables avant l'entrée des invités."}, {"o": ["d", 1], "t": "Récupérer vos effets personnels", "d": "Au plus tard à 7 h 30. Réglez aussi la facture ouverte du bar avant votre départ, s'il y a lieu."}], "ui": {"g": "Google", "o": "Outlook.com", "past": "Date passée"}, "lang": "fr-CA"};</script>
+</div><p class="check-note">Cochez les étapes au fur et à mesure : vos coches restent enregistrées sur cet appareil.</p>
 <article class="post" id="8-a-12-mois-avant"><h3>8 à 12 mois avant</h3>
 <ul class="checks">
 <li class="is-aub"><label><input type="checkbox" data-k="fr/dates-cles-avec-l-auberge/8-a-12-mois-avant/1"><span class="box"></span><span class="ct"><span class="aub" title="Étape avec l&#x27;Auberge">◆<span class="sr"> Étape avec l&#x27;Auberge</span></span><strong>Rencontre avec votre coordonnatrice mariage</strong> : menu, aménagement, hébergement et horaire de la réception.</span></label></li>
@@ -113,6 +123,6 @@
   <p class="foot-note">Ce site est réservé aux mariés de l&#x27;Auberge des Gallant. Merci de ne pas le partager publiquement.</p>
 </footer>
 <script>window.ADG_UI={none:"Aucun r\u00e9sultat. Essayez un autre mot, ou \u00e9crivez-nous \u00e0 mariage@gallant.qc.ca."};</script>
-<script src="../assets/search-fr.js?v=630b28c7"></script>
-<script src="../assets/app.js?v=630b28c7"></script>
+<script src="../assets/search-fr.js?v=e200fad2"></script>
+<script src="../assets/app.js?v=e200fad2"></script>
 </body></html>
