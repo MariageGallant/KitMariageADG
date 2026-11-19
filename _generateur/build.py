@@ -108,6 +108,9 @@ ATTACH = {
   "Trousse_marque-places_clients.zip": ("Gabarits de marque-places (ZIP)", "Gabarits_de_marque-places.zip"),
   "Formulaire_La_Grande_Finale.pdf": ("Formulaire « La Grande Finale » (PDF)", "Formulaire_La_Grande_Finale.pdf"),
   "Hébergement à proximité - Local lodging.pdf": ("Voir la fiche dans la rubrique Hébergement", "#hebergement/hebergement-et-transport-a-proximite"),
+  "Ajouter le Salon à Google Agenda": ("Ajouter le Salon à Google Agenda", "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Salon+des+Mari%C3%A9s+%C2%B7+Auberge+des+Gallant&dates=20270116T100000%2F20270116T160000&ctz=America%2FToronto&location=Auberge+des+Gallant%2C+1171%2C+chemin+Saint-Henri%2C+Sainte-Marthe+%28Qu%C3%A9bec%29&details=Entr%C3%A9e+gratuite%2C+de+10+h+%C3%A0+16+h.+Souper+d%C3%A9gustation+d%C3%A8s+16+h%2C+sur+r%C3%A9servation."),
+  "Ajouter le Salon à Outlook": ("Ajouter le Salon à Outlook", "https://outlook.live.com/calendar/0/action/compose?subject=Salon+des+Mari%C3%A9s+%C2%B7+Auberge+des+Gallant&startdt=2027-01-16T10%3A00%3A00&enddt=2027-01-16T16%3A00%3A00&location=Auberge+des+Gallant%2C+1171%2C+chemin+Saint-Henri%2C+Sainte-Marthe+%28Qu%C3%A9bec%29&body=Entr%C3%A9e+gratuite%2C+de+10+h+%C3%A0+16+h.+Souper+d%C3%A9gustation+d%C3%A8s+16+h%2C+sur+r%C3%A9servation."),
+  "Réserver votre souper et confirmer vos choix de repas": ("Réserver votre souper et confirmer vos choix de repas", "https://forms.cloud.microsoft/r/GfhissfCwW"),
  },
  "en": {
   'Your hall\'s floor plan (see "Downloadable tools")': ("Floor plans of our reception halls", "Floor_plans_of_our_reception_halls.zip"),
@@ -121,6 +124,9 @@ ATTACH = {
   "Place_card_kit.zip": ("Place card templates (ZIP)", "Place_card_templates.zip"),
   "La_Grande_Finale_form.pdf": ("\"La Grande Finale\" form (PDF)", "La_Grande_Finale_form.pdf"),
   "Hébergement à proximité - Local lodging.pdf": ("See the sheet in the Accommodations section", "#accommodations/nearby-lodging-and-transportation"),
+  "Add the Wedding Show to Google Calendar": ("Add the Wedding Show to Google Calendar", "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Wedding+Show+%C2%B7+Auberge+des+Gallant&dates=20270116T100000%2F20270116T160000&ctz=America%2FToronto&location=Auberge+des+Gallant%2C+1171%2C+chemin+Saint-Henri%2C+Sainte-Marthe+%28Qu%C3%A9bec%29&details=Free+admission%2C+10+a.m.+to+4+p.m.+Tasting+Dinner+from+4+p.m.%2C+by+reservation."),
+  "Add the Wedding Show to Outlook": ("Add the Wedding Show to Outlook", "https://outlook.live.com/calendar/0/action/compose?subject=Wedding+Show+%C2%B7+Auberge+des+Gallant&startdt=2027-01-16T10%3A00%3A00&enddt=2027-01-16T16%3A00%3A00&location=Auberge+des+Gallant%2C+1171%2C+chemin+Saint-Henri%2C+Sainte-Marthe+%28Qu%C3%A9bec%29&body=Free+admission%2C+10+a.m.+to+4+p.m.+Tasting+Dinner+from+4+p.m.%2C+by+reservation."),
+  "Book your dinner and confirm your meal choices": ("Book your dinner and confirm your meal choices", "https://forms.cloud.microsoft/r/GfhissfCwW"),
  },
 }
 
@@ -159,7 +165,16 @@ def load_keywords(lang):
             if pub.get("mots"): kw[pub["titre"]] = pub["mots"]
     return kw
 
+DATES_TITLES = ("Dates clés avec l'Auberge", "Key dates with the Auberge")
+SALON_TITLES = ("Salon des Mariés", "Wedding Show")
+LINK_ALIAS = {
+ "fr": {"La Grande Finale": ("Outils à télécharger", "Formulaire « La Grande Finale »")},
+ "en": {"La Grande Finale": ("Downloadable tools", '"La Grande Finale" form')},
+}
+SALON_HOME = {"fr": "Salon des Mariés · 16 janvier 2027", "en": "Wedding Show · January 16, 2027"}
+
 ICON_CAL = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>'
+ICON_STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>'
 ICON_SEARCH = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m15.5 15.5 5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>'
 
 class Lang:
@@ -171,6 +186,18 @@ class Lang:
             for p in s["posts"]:
                 p["slug"] = slug(p["titre"])
         self.by_title = {s["titre"]: s for s in self.sections}
+        # titres de publications -> (rubrique, publication); titres en double ignorés (ambigus)
+        seen = {}
+        for s in self.sections:
+            for p in s["posts"]:
+                seen.setdefault(p["titre"], []).append((s, p))
+        self.by_post = {t: v[0] for t, v in seen.items() if len(v) == 1}
+        for t, (st, pt) in LINK_ALIAS[code].items():
+            s = self.by_title[st]; p = next(x for x in s["posts"] if x["titre"] == pt)
+            self.by_post[t] = (s, p)
+        self.cur = None
+        self.dates_sec = next(s for s in self.sections if s["titre"] in DATES_TITLES)
+        self.salon_sec = next((s for s in self.sections if s["titre"] in SALON_TITLES), None)
         self.used_subst = set()
         self.kw = load_keywords(code)
 
@@ -202,16 +229,19 @@ class Lang:
         t = re.sub(r"\b([\w.-]+@gallant\.qc\.ca)\b", r'<a href="mailto:\1">\1</a>', t)
         t = re.sub(r"(?<![/\w.])(www\.gallant\.ca)\b", r'<a href="https://\1" target="_blank" rel="noopener">\1</a>', t)
         t = re.sub(r"(?<![/\w.@])(aubergemontrigaud\.com)\b", r'<a href="https://\1" target="_blank" rel="noopener">\1</a>', t)
-        def sec(m):
-            name = html.unescape(m.group(1))
+        def href(name):
             s = self.by_title.get(name)
-            if s:
-                return f'« <a href="{s["slug"]}.html">{m.group(1)}</a> »'
-            return m.group(0)
+            if s: return f'{s["slug"]}.html'
+            sp = self.by_post.get(name)
+            if sp and sp[1] is not self.cur: return f'{sp[0]["slug"]}.html#{sp[1]["slug"]}'
+            return None
+        def sec(m):
+            h = href(html.unescape(m.group(1)))
+            return f'« <a href="{h}">{m.group(1)}</a> »' if h else m.group(0)
         t = re.sub(r"« ([^«»]+?) »", sec, t)
         def sec_en(m):
-            s = self.by_title.get(html.unescape(m.group(1)))
-            return f'"<a href="{s["slug"]}.html">{m.group(1)}</a>"' if s else m.group(0)
+            h = href(html.unescape(m.group(1)))
+            return f'"<a href="{h}">{m.group(1)}</a>"' if h else m.group(0)
         t = re.sub(r"&quot;([^&]+?)&quot;", sec_en, t)
         return t
 
@@ -236,6 +266,7 @@ class Lang:
     def body(self, sec, post):
         out, lst, chk = [], None, False
         page_id = f"{self.code}/{sec['slug']}/{post['slug']}"
+        self.cur = post
         def close():
             nonlocal lst
             if lst: out.append(f"</{lst}>"); lst = None
@@ -427,7 +458,10 @@ def page_home(L):
     <p class="kicker">{esc(ui['kicker'])}</p>
     <h1>{esc(m.TITRE)}</h1>
     <p class="lede">{esc(m.SOUS_TITRE)}</p>
-    <a class="home-cal" href="{L.sections[1]['slug']}.html#agenda"><span class="s-ic">{ICON_CAL}</span>{esc(CAL_UI[L.code]['home'])}<span class="hc-go">{ICON_ARR}</span></a>
+    <div class="home-btns">
+    <a class="home-cal" href="{L.dates_sec['slug']}.html#agenda"><span class="s-ic">{ICON_CAL}</span>{esc(CAL_UI[L.code]['home'])}<span class="hc-go">{ICON_ARR}</span></a>
+    {f'<a class="home-cal" href="{L.salon_sec["slug"]}.html"><span class="s-ic">{ICON_STAR}</span>{esc(SALON_HOME[L.code])}<span class="hc-go">{ICON_ARR}</span></a>' if L.salon_sec else ''}
+    </div>
   </section>
   <section class="grid-wrap">
     <h2 class="sc-title">{esc(ui['sections'])}</h2>
@@ -446,7 +480,7 @@ def page_section(L, i, s):
     for p in s["posts"]:
         b, chk = L.body(s, p); any_chk |= chk
         arts.append(f'<article class="post" id="{p["slug"]}"><h3>{esc(L.subst(p["titre"]))}</h3>\n{b}\n</article>')
-    extra = cal_block(L) if i == 1 else ""
+    extra = cal_block(L) if s is L.dates_sec else ""
     if s is secs[-1]:   # Outils à télécharger : le kit complet en tête
         def big(t):
             lab, f, d = t

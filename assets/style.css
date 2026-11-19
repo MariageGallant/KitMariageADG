@@ -249,3 +249,6 @@ svg{width:100%;height:auto;display:block}
   .home-cal{font-size:11px;letter-spacing:.08em}
 }
 @media print{.cal-in,.cal-ics,.cl-b,.home-cal,.cal-note{display:none}}
+.home-btns{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:32px}
+.home-btns .home-cal{margin:0}
+.wide img{max-height:640px;width:auto;max-width:100%;display:block;margin:0 auto}
