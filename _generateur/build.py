@@ -502,7 +502,7 @@ def page_section(L, i, s):
 <main>
   <section class="sec-head">
     <p class="kicker"><a href="index.html">{esc(ui['home'])}</a><span class="dot">·</span>{i+1:02d}</p>
-    <h1>{esc(s['titre'])}</h1>
+    {'<img class="sec-logo" src="../assets/img/logo_salon_des_maries.png" alt="Salon des Mariés · Wedding Show">' if s is L.salon_sec else f"<h1>{esc(s['titre'])}</h1>"}
     <p class="lede">{esc(s['intro'])}</p>
     <span class="rule"></span>
   </section>
