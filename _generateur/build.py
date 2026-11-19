@@ -272,9 +272,9 @@ class Lang:
 # Décalage par rapport à la date du mariage : ("m", n) = n mois avant, ("d", n) = n jours (négatif = avant).
 KEYDATES = [
  (("m", -12), "Valider les détails de votre contrat",
-   "Entre 8 et 12 mois avant le mariage : relisez votre contrat (menu, aménagement, hébergement, horaire de la réception). Si certains points sont à clarifier, écrivez à mariage@gallant.qc.ca ou appelez votre coordonnatrice au 450-459-4241, poste 312. Pas besoin de prendre rendez-vous : la plupart des détails sont déjà dans votre contrat.",
+   "Entre 8 et 12 mois avant le mariage : relisez votre contrat. Pour clarifier certains points, écrivez à mariage@gallant.qc.ca ou appelez au 450-459-4241, poste 312, pour fixer un rendez-vous téléphonique. Une rencontre à l'Auberge est aussi possible sur demande.",
    "Confirm the details of your contract",
-   "Between 8 and 12 months before the wedding: review your contract (menu, layout, accommodations, reception schedule). If any points need clarifying, write to mariage@gallant.qc.ca or call your wedding coordinator at 450-459-4241, ext. 312. No need to book a meeting: most of the details are already in your contract."),
+   "Between 8 and 12 months before the wedding: review your contract. To clarify any points, write to mariage@gallant.qc.ca or call 450-459-4241, ext. 312, to set up a phone appointment. A meeting at the Auberge is also possible on request."),
  (("m", -8), "Menu, bar et essai du menu mariage",
    "Entre 6 et 8 mois avant : planifiez le menu et le bar avec votre coordonnatrice, et réservez votre essai du menu mariage (sur rendez-vous, au moins 1 semaine d'avance).",
    "Menu, bar and wedding menu tasting",
