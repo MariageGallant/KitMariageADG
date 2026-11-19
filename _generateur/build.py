@@ -111,6 +111,7 @@ ATTACH = {
   "Ajouter le Salon à Google Agenda": ("Ajouter le Salon à Google Agenda", "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Salon+des+Mari%C3%A9s+%C2%B7+Auberge+des+Gallant&dates=20270116T100000%2F20270116T160000&ctz=America%2FToronto&location=Auberge+des+Gallant%2C+1171%2C+chemin+Saint-Henri%2C+Sainte-Marthe+%28Qu%C3%A9bec%29&details=Entr%C3%A9e+gratuite%2C+de+10+h+%C3%A0+16+h.+Souper+d%C3%A9gustation+d%C3%A8s+16+h%2C+sur+r%C3%A9servation."),
   "Ajouter le Salon à Outlook": ("Ajouter le Salon à Outlook", "https://outlook.live.com/calendar/0/action/compose?subject=Salon+des+Mari%C3%A9s+%C2%B7+Auberge+des+Gallant&startdt=2027-01-16T10%3A00%3A00&enddt=2027-01-16T16%3A00%3A00&location=Auberge+des+Gallant%2C+1171%2C+chemin+Saint-Henri%2C+Sainte-Marthe+%28Qu%C3%A9bec%29&body=Entr%C3%A9e+gratuite%2C+de+10+h+%C3%A0+16+h.+Souper+d%C3%A9gustation+d%C3%A8s+16+h%2C+sur+r%C3%A9servation."),
   "Réserver votre souper et confirmer vos choix de repas": ("Réserver votre souper et confirmer vos choix de repas", "https://forms.cloud.microsoft/r/GfhissfCwW"),
+  "Plan du plafond du Pavillon (PDF)": ("Plan du plafond du Pavillon (PDF)", "Plan_plafond_Pavillon_des_Gallant.pdf"),
  },
  "en": {
   'Your hall\'s floor plan (see "Downloadable tools")': ("Floor plans of our reception halls", "Floor_plans_of_our_reception_halls.zip"),
@@ -127,6 +128,7 @@ ATTACH = {
   "Add the Wedding Show to Google Calendar": ("Add the Wedding Show to Google Calendar", "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Wedding+Show+%C2%B7+Auberge+des+Gallant&dates=20270116T100000%2F20270116T160000&ctz=America%2FToronto&location=Auberge+des+Gallant%2C+1171%2C+chemin+Saint-Henri%2C+Sainte-Marthe+%28Qu%C3%A9bec%29&details=Free+admission%2C+10+a.m.+to+4+p.m.+Tasting+Dinner+from+4+p.m.%2C+by+reservation."),
   "Add the Wedding Show to Outlook": ("Add the Wedding Show to Outlook", "https://outlook.live.com/calendar/0/action/compose?subject=Wedding+Show+%C2%B7+Auberge+des+Gallant&startdt=2027-01-16T10%3A00%3A00&enddt=2027-01-16T16%3A00%3A00&location=Auberge+des+Gallant%2C+1171%2C+chemin+Saint-Henri%2C+Sainte-Marthe+%28Qu%C3%A9bec%29&body=Free+admission%2C+10+a.m.+to+4+p.m.+Tasting+Dinner+from+4+p.m.%2C+by+reservation."),
   "Book your dinner and confirm your meal choices": ("Book your dinner and confirm your meal choices", "https://forms.cloud.microsoft/r/GfhissfCwW"),
+  "Pavillon ceiling plan (PDF)": ("Pavillon ceiling plan (PDF)", "Pavillon_des_Gallant_ceiling_plan.pdf"),
  },
 }
 
