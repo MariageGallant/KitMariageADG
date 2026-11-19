@@ -271,10 +271,10 @@ class Lang:
 # ------------------------------------------------------------------ dates clés pour l'agenda
 # Décalage par rapport à la date du mariage : ("m", n) = n mois avant, ("d", n) = n jours (négatif = avant).
 KEYDATES = [
- (("m", -12), "Planifier votre rencontre avec votre coordonnatrice mariage",
-   "Entre 8 et 12 mois avant le mariage : menu, aménagement, hébergement et horaire de la réception. Écrivez-nous à mariage@gallant.qc.ca pour fixer le rendez-vous.",
-   "Plan your meeting with your wedding coordinator",
-   "Between 8 and 12 months before the wedding: menu, setup, accommodations and reception schedule. Write to mariage@gallant.qc.ca to set up the meeting."),
+ (("m", -12), "Valider les détails de votre contrat",
+   "Entre 8 et 12 mois avant le mariage : relisez votre contrat (menu, aménagement, hébergement, horaire de la réception). Si certains points sont à clarifier, écrivez à mariage@gallant.qc.ca ou appelez votre coordonnatrice au 450-459-4241, poste 312. Pas besoin de prendre rendez-vous : la plupart des détails sont déjà dans votre contrat.",
+   "Confirm the details of your contract",
+   "Between 8 and 12 months before the wedding: review your contract (menu, layout, accommodations, reception schedule). If any points need clarifying, write to mariage@gallant.qc.ca or call your wedding coordinator at 450-459-4241, ext. 312. No need to book a meeting: most of the details are already in your contract."),
  (("m", -8), "Menu, bar et essai du menu mariage",
    "Entre 6 et 8 mois avant : planifiez le menu et le bar avec votre coordonnatrice, et réservez votre essai du menu mariage (sur rendez-vous, au moins 1 semaine d'avance).",
    "Menu, bar and wedding menu tasting",
