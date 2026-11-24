@@ -485,7 +485,7 @@ def video_block(slug):
     if not v: return ""
     vid, t = v
     return (f'<figure class="video"><p class="kicker">{esc(t)}</p><div class="video-in">'
-            f'<iframe src="https://www.youtube-nocookie.com/embed/{vid}?rel=0" title="{esc(t)}" loading="lazy" '
+            f'<iframe src="https://www.youtube-nocookie.com/embed/{vid}?rel=0" title="{esc(t)}" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" '
             f'allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div></figure>')
 
 def page_section(L, i, s):
