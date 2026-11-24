@@ -497,7 +497,6 @@ def page_section(L, i, s):
         b, chk = L.body(s, p); any_chk |= chk
         arts.append(f'<article class="post" id="{p["slug"]}"><h3>{esc(L.subst(p["titre"]))}</h3>\n{b}\n</article>')
     extra = cal_block(L) if s is L.dates_sec else ""
-    extra += video_block(s["slug"])
     if s is secs[-1]:   # Outils à télécharger : le kit complet en tête
         def big(t):
             lab, f, d = t
@@ -523,6 +522,7 @@ def page_section(L, i, s):
     <p class="lede">{esc(s['intro'])}</p>
     <span class="rule"></span>
   </section>
+  {video_block(s["slug"])}
   <div class="sec-body">
     <aside class="toc"><p class="toc-t">{esc(ui['on_page'])}</p><ol>{toc}</ol>
       <button class="print" onclick="window.print()">{esc(ui['print'])}</button></aside>
