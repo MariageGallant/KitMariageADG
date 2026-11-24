@@ -474,6 +474,20 @@ def page_home(L):
 </main>
 {footer(L)}"""
 
+# Vidéo YouTube en tête d'une rubrique (slug de la rubrique -> (id YouTube, titre FR/EN))
+VIDEOS = {
+    "nos-salles-et-la-ceremonie": ("QaPwW8MGCxg", "Visite vidéo de nos salles"),
+    "our-reception-halls-and-the-ceremony": ("QaPwW8MGCxg", "Video tour of our reception halls"),
+}
+
+def video_block(slug):
+    v = VIDEOS.get(slug)
+    if not v: return ""
+    vid, t = v
+    return (f'<figure class="video"><p class="kicker">{esc(t)}</p><div class="video-in">'
+            f'<iframe src="https://www.youtube-nocookie.com/embed/{vid}?rel=0" title="{esc(t)}" loading="lazy" '
+            f'allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe></div></figure>')
+
 def page_section(L, i, s):
     ui = L.ui
     secs = L.sections
@@ -483,6 +497,7 @@ def page_section(L, i, s):
         b, chk = L.body(s, p); any_chk |= chk
         arts.append(f'<article class="post" id="{p["slug"]}"><h3>{esc(L.subst(p["titre"]))}</h3>\n{b}\n</article>')
     extra = cal_block(L) if s is L.dates_sec else ""
+    extra += video_block(s["slug"])
     if s is secs[-1]:   # Outils à télécharger : le kit complet en tête
         def big(t):
             lab, f, d = t
