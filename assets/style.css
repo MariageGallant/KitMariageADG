@@ -253,3 +253,10 @@ svg{width:100%;height:auto;display:block}
 .home-btns .home-cal{margin:0}
 .wide img{max-height:640px;width:auto;max-width:100%;display:block;margin:0 auto}
 .sec-logo{display:block;width:min(560px,92%);height:auto;margin:6px auto 18px}
+
+/* Vidéo YouTube en tête de rubrique */
+.video{margin:0 0 28px}
+.video .kicker{text-align:center}
+.video-in{position:relative;padding-top:56.25%;background:var(--charbon)}
+.video-in iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+@media print{.video{display:none}}
